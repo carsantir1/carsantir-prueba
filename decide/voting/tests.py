@@ -14,6 +14,7 @@ from mixnet.mixcrypt import ElGamal
 from mixnet.mixcrypt import MixCrypt
 from mixnet.models import Auth
 from voting.models import Voting, Question, QuestionOption
+from django.db import IntegrityError
 
 
 class VotingTestCase(BaseTestCase):
@@ -130,6 +131,17 @@ class VotingTestCase(BaseTestCase):
 
         response = self.client.post('/voting/', data, format='json')
         self.assertEqual(response.status_code, 201)
+
+    
+    def test_votaciones_duplicadas(self):
+        v1=self.create_voting()
+        v1.name="Votacion1"
+        v1.save()
+        v2=self.create_voting()
+        v2.name="Votacion1"
+        with self.assertRaises(IntegrityError):
+            v2.save()
+
 
     def test_update_voting(self):
         voting = self.create_voting()
