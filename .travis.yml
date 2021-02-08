@@ -21,4 +21,4 @@ script:
   - python-codacy-coverage -r coverage.xml
 branches:
   only:
-    - desarrollo
+    - main
